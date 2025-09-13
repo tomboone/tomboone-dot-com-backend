@@ -113,8 +113,8 @@ jobs:
           # Install dependencies
           poetry install --without dev
           
-          # Force reinstall cryptography with no binary to ensure compatibility
-          poetry run pip install --force-reinstall --no-binary cryptography cryptography
+          # Force reinstall cryptography with an older version compatible with Azure App Service
+          poetry run pip install --force-reinstall "cryptography<42.0.0"
 
       - name: Construct deployment artifact
         run: |
