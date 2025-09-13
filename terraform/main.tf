@@ -67,8 +67,8 @@ data "azurerm_log_analytics_workspace" "existing" {
 
 # VNet integration - reference existing VNet infrastructure
 data "azurerm_virtual_network" "vnet" {
-  name                = "tbc-vnet"
-  resource_group_name = "tbc-vnet-rg"
+  name                = var.vnet_name
+  resource_group_name = var.vnet_rg_name
 }
 
 data "azurerm_subnet" "integration" {
@@ -130,10 +130,6 @@ resource "azurerm_linux_web_app" "main" {
 
   virtual_network_subnet_id = data.azurerm_subnet.integration.id
 
-  identity {
-    type = "SystemAssigned"
-  }
-
   site_config {
     always_on = true
     app_command_line = "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"
@@ -153,10 +149,10 @@ resource "azurerm_linux_web_app" "main" {
   app_settings = {
     AZURE_TENANT_ID                       = var.api_app_tenant_id
     AZURE_CLIENT_ID                       = var.api_app_client_id
-    USE_MANAGED_IDENTITY                  = "true"
     "MYSQL_SSL_CA_CONTENT"                = local.mysql_ca_cert_content
     DATABASE_URL                          = "mysql+pymysql://${mysql_user.prod.user}:${mysql_user.prod.plaintext_password}@${data.azurerm_mysql_flexible_server.existing.fqdn}:3306/${azurerm_mysql_flexible_database.main.name}?charset=${azurerm_mysql_flexible_database.main.charset}&ssl_disabled=false&ssl_verify_cert=false&ssl_verify_identity=false"
     APPLICATIONINSIGHTS_CONNECTION_STRING = azurerm_application_insights.main.connection_string
+    SCM_DO_BUILD_DURING_DEPLOYMENT        = "false"
   }
 
   https_only = true

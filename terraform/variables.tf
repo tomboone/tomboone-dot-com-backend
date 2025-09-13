@@ -28,6 +28,16 @@ variable "log_analytics_workspace_rg_name" {
   description = "Resource group for the existing log analytics workspace"
 }
 
+variable "vnet_name" {
+  type = string
+  description = "Name of the existing virtual network to use"
+}
+
+variable "vnet_rg_name" {
+  type = string
+  description = "Resource group for the existing virtual network"
+}
+
 variable "mysql_admin_username" {
   type = string
   description = "Admin username for the existing MySQL flexible server"
