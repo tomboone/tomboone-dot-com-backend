@@ -164,7 +164,7 @@ jobs:
         run: unzip python-app.zip -d app
 
       - name: Deploy to Stage Slot
-        uses: Azure/webapps-deploy@v2
+        uses: Azure/webapps-deploy@v3
         with:
           app-name: ${{ env.APP_NAME }}
           slot-name: 'stage'
