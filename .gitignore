@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / compiled files
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+
+# Virtual environment
+.venv/
+env/
+venv/
+/tmp/
+
+# Editor-specific files
+.vscode
+.idea
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.*
+
+# Database files (if using SQLite)
+*.sqlite3
+*.db
+
+# Test coverage output
+.coverage
+.coverage.*
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Logs
+*.log
+
+# Terraform
+.terraform
+backend.hcl
+terraform.tfvars
+tfplan
