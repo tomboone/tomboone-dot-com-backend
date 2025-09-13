@@ -109,7 +109,12 @@ jobs:
         run: poetry config virtualenvs.in-project true
 
       - name: Build with Poetry
-        run: poetry install --without dev
+        run: |
+          # Install dependencies
+          poetry install --without dev
+          
+          # Force reinstall cryptography with no binary to ensure compatibility
+          poetry run pip install --force-reinstall --no-binary cryptography cryptography
 
       - name: Construct deployment artifact
         run: |
