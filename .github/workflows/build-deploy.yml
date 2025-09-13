@@ -33,6 +33,8 @@ env:
   TF_VAR_mysql_flexible_server_rg_name: ${{ secrets.MYSQL_FLEXIBLE_SERVER_RG_NAME }}
   TF_VAR_log_analytics_workspace_name: ${{ secrets.LOG_ANALYTICS_WORKSPACE_NAME }}
   TF_VAR_log_analytics_workspace_rg_name: ${{ secrets.LOG_ANALYTICS_WORKSPACE_RG_NAME }}
+  TF_VAR_vnet_name: ${{ secrets.VNET_NAME }}
+  TF_VAR_vnet_rg_name: ${{ secrets.VNET_RG_NAME }}
   TF_VAR_mysql_admin_username: ${{ secrets.MYSQL_ADMIN_USERNAME }}
   TF_VAR_mysql_admin_password: ${{ secrets.MYSQL_ADMIN_PASSWORD }}
   TF_VAR_api_app_tenant_id: ${{ secrets.API_APP_TENANT_ID }}
