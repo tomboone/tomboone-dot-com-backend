@@ -65,6 +65,18 @@ data "azurerm_log_analytics_workspace" "existing" {
   resource_group_name = var.log_analytics_workspace_rg_name
 }
 
+# VNet integration - reference existing VNet infrastructure
+data "azurerm_virtual_network" "vnet" {
+  name                = "tbc-vnet"
+  resource_group_name = "tbc-vnet-rg"
+}
+
+data "azurerm_subnet" "integration" {
+  name                 = "IntegrationSubnet"
+  virtual_network_name = data.azurerm_virtual_network.vnet.name
+  resource_group_name  = data.azurerm_virtual_network.vnet.resource_group_name
+}
+
 # Resource group
 resource "azurerm_resource_group" "main" {
   name     = "${ local.service_name }-rg"
@@ -116,12 +128,15 @@ resource "azurerm_linux_web_app" "main" {
   resource_group_name = azurerm_resource_group.main.name
   service_plan_id     = data.azurerm_service_plan.existing.id
 
+  virtual_network_subnet_id = data.azurerm_subnet.integration.id
+
   identity {
     type = "SystemAssigned"
   }
 
   site_config {
     always_on = true
+    app_command_line = "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"
     cors {
       allowed_origins = [
         var.front_end_url,
