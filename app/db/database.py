@@ -2,6 +2,9 @@
 from sqlmodel import create_engine, Session
 from app.config import settings
 
+# Export DATABASE_URL for Alembic
+SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL
+
 # Database engine
 connect_args = {}
 if "sqlite" in settings.DATABASE_URL:
@@ -12,7 +15,7 @@ elif "mysql" in settings.DATABASE_URL:
         "use_unicode": True,
     }
 
-engine = create_engine(settings.DATABASE_URL, connect_args=connect_args)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args=connect_args)
 
 
 def get_session():
