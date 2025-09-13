@@ -180,13 +180,24 @@ jobs:
           KUDU_USERNAME=$(echo "$PUBLISH_PROFILE" | grep -o 'userName="[^"]*"' | head -1 | sed 's/userName="//g' | sed 's/"//g')
           KUDU_PASSWORD=$(echo "$PUBLISH_PROFILE" | grep -o 'userPWD="[^"]*"' | head -1 | sed 's/userPWD="//g' | sed 's/"//g')
           
+          # First, let's check what Python executables are available
+          echo "Checking available Python executables..."
+          PYTHON_CHECK=$(curl -X POST "https://$APP_NAME.scm.azurewebsites.net/api/command" \
+            --user "$KUDU_USERNAME:$KUDU_PASSWORD" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "command": "which python3 || which python || find /opt -name python* 2>/dev/null || echo PATH=$PATH",
+              "dir": "/home/site/wwwroot"
+            }')
+          echo "Python check response: $PYTHON_CHECK"
+          
           # Use Kudu API to execute migration command
           echo "Executing migration via Kudu API..."
           RESPONSE=$(curl -X POST "https://$APP_NAME.scm.azurewebsites.net/api/command" \
             --user "$KUDU_USERNAME:$KUDU_PASSWORD" \
             -H "Content-Type: application/json" \
             -d '{
-              "command": "python -m alembic -c alembic.ini upgrade head",
+              "command": "python3 -m alembic -c alembic.ini upgrade head",
               "dir": "/home/site/wwwroot"
             }')
           
