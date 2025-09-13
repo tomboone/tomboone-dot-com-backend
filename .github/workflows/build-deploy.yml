@@ -175,5 +175,27 @@ jobs:
           APP_NAME="${{ env.APP_NAME }}"
           RG_NAME="${{ env.RG_NAME }}"
 
-          # Run migration command directly in the App Service container
-          az webapp ssh --name "$APP_NAME" --resource-group "$RG_NAME" --command "cd /home/site/wwwroot && python -m alembic -c alembic.ini upgrade head"
+          # Get publishing credentials for Kudu API
+          PUBLISH_PROFILE=$(az webapp deployment list-publishing-profiles --name "$APP_NAME" --resource-group "$RG_NAME" --xml)
+          KUDU_USERNAME=$(echo "$PUBLISH_PROFILE" | grep -o 'userName="[^"]*"' | head -1 | sed 's/userName="//g' | sed 's/"//g')
+          KUDU_PASSWORD=$(echo "$PUBLISH_PROFILE" | grep -o 'userPWD="[^"]*"' | head -1 | sed 's/userPWD="//g' | sed 's/"//g')
+          
+          # Use Kudu API to execute migration command
+          echo "Executing migration via Kudu API..."
+          RESPONSE=$(curl -X POST "https://$APP_NAME.scm.azurewebsites.net/api/command" \
+            --user "$KUDU_USERNAME:$KUDU_PASSWORD" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "command": "python -m alembic -c alembic.ini upgrade head",
+              "dir": "/home/site/wwwroot"
+            }')
+          
+          echo "Migration response: $RESPONSE"
+          
+          # Check if migration was successful
+          if echo "$RESPONSE" | grep -q '"ExitCode":0'; then
+            echo "Migration completed successfully"
+          else
+            echo "Migration failed"
+            exit 1
+          fi
