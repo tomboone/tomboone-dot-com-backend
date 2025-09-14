@@ -137,7 +137,7 @@ resource "azurerm_linux_web_app" "main" {
 
   site_config {
     always_on = true
-    app_command_line = "/home/site/wwwroot/antenv/bin/python -m alembic upgrade head && /home/site/wwwroot/antenv/bin/python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    app_command_line = "/home/site/wwwroot/.venv/bin/python -m alembic upgrade head && /home/site/wwwroot/.venv/bin/python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"
     cors {
       allowed_origins = [
         var.front_end_url,
