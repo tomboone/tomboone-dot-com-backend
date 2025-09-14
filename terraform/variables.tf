@@ -59,11 +59,6 @@ variable "api_app_client_id" {
   description = "Client ID for the Entra ID API app registration"
 }
 
-variable "openapi_client_id" {
-  type = string
-  description = "Client ID for the Open API app registration"
-}
-
 variable "front_end_url" {
   type = string
   description = "The custom domain production URL of the front end"
