@@ -15,7 +15,7 @@ class WorkExperienceRepository(BaseRepository[WorkExperience]):
         statement = (
             select(self.model)
             .where(self.model.profile_id == profile_id)
-            .order_by(self.model.order_index)
+            .order_by(self.model.order_index)  # type: ignore[arg-type]
         )
         return list(self.db.exec(statement).all())
 

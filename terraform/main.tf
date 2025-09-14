@@ -129,10 +129,15 @@ resource "azurerm_linux_web_app" "main" {
   service_plan_id     = data.azurerm_service_plan.existing.id
 
   virtual_network_subnet_id = data.azurerm_subnet.integration.id
+  https_only = true
+
+  identity {
+    type = "SystemAssigned"
+  }
 
   site_config {
     always_on = true
-    app_command_line = "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    app_command_line = "python -m alembic upgrade head && python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"
     cors {
       allowed_origins = [
         var.front_end_url,
@@ -147,13 +152,12 @@ resource "azurerm_linux_web_app" "main" {
   }
 
   app_settings = {
-    AZURE_TENANT_ID                       = var.api_app_tenant_id
-    AZURE_CLIENT_ID                       = var.api_app_client_id
-    "MYSQL_SSL_CA_CONTENT"                = local.mysql_ca_cert_content
-    DATABASE_URL                          = "mysql+pymysql://${mysql_user.prod.user}:${mysql_user.prod.plaintext_password}@${data.azurerm_mysql_flexible_server.existing.fqdn}:3306/${azurerm_mysql_flexible_database.main.name}?charset=${azurerm_mysql_flexible_database.main.charset}&ssl_disabled=false&ssl_verify_cert=false&ssl_verify_identity=false"
-    APPLICATIONINSIGHTS_CONNECTION_STRING = azurerm_application_insights.main.connection_string
-    SCM_DO_BUILD_DURING_DEPLOYMENT        = "false"
+    "AZURE_TENANT_ID"                       = var.api_app_tenant_id
+    "AZURE_CLIENT_ID"                       = var.api_app_client_id
+    "OPENAPI_CLIENT_ID"                     = var.openapi_client_id
+    "MYSQL_SSL_CA_CONTENT"                  = local.mysql_ca_cert_content
+    "DATABASE_URL"                          = "mysql+pymysql://${mysql_user.prod.user}:${mysql_user.prod.plaintext_password}@${data.azurerm_mysql_flexible_server.existing.fqdn}:3306/${azurerm_mysql_flexible_database.main.name}?charset=${azurerm_mysql_flexible_database.main.charset}&ssl_disabled=false&ssl_verify_cert=false&ssl_verify_identity=false"
+    "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.main.connection_string
+    "SCM_DO_BUILD_DURING_DEPLOYMENT"        = "false"
   }
-
-  https_only = true
 }

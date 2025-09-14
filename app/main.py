@@ -5,7 +5,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel
 from app.db.database import engine
 from app.routers import profile_router
-from app.auth.azure_ad import azure_scheme
 from app.config import settings
 
 
@@ -31,10 +30,6 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
-
-# Configure Azure AD integration if available
-if azure_scheme:
-    app.include_router(azure_scheme.router, prefix="/auth", tags=["auth"])
 
 # Include routers
 app.include_router(profile_router, prefix="/api/v1")
