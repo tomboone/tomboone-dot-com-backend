@@ -118,19 +118,22 @@ jobs:
 
       - name: Construct deployment artifact
         run: |
-          mkdir -p deploy
-          cp -r $(poetry env info --path)/lib/python${{ env.PYTHON_VERSION }}/site-packages/* deploy/
-          find . -maxdepth 1 -type f -name "*.py" -exec cp {} deploy/ \;
-          cp -r app deploy/
-          cp -r alembic deploy/
-          cp alembic.ini deploy/ 2>/dev/null || true
-          mkdir -p deploy/instance
+          VENV_PATH=$(poetry env info --path)
+          mkdir -p deployment_package/.python_packages/lib/site-packages
+          cp -r $VENV_PATH/lib/python*/site-packages/* deployment_package/.python_packages/lib/site-packages/
+          cp alembic.ini deployment_package/
+          cp -r alembic app deployment_package/
+
+      - name: Zip artifact for deployment
+        run: |
+          cd deployment_package
+          zip -r ../python-app.zip .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: deploy/
+          path: python-app.zip
 
   deploy:
     name: Deploy
@@ -142,11 +145,13 @@ jobs:
       APP_SERVICE_NAME: ${{ needs.terraform.outputs.app_service_name }}
 
     steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v5
         with:
           name: python-app
-          path: .
+
+      - name: Unzip deployment artifact
+        run: unzip python-app.zip -d app
 
       - name: Azure Login
         uses: azure/login@v2
@@ -160,3 +165,4 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.APP_SERVICE_NAME }}
+          package: 'app'
