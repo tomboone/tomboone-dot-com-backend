@@ -120,16 +120,10 @@ jobs:
         with:
           name: python-app
           path: |
-            .
-            !.github
-            !scripts
-            !terraform
-            !.gitignore
-            !LICENSE
-            !poetry.lock
-            !poetry.toml
-            !pyproject.toml
-            !README.md
+            app/
+            alembic/
+            alembic.ini
+            antenv/
 
   deploy:
     name: Deploy
