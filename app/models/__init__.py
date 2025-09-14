@@ -24,7 +24,7 @@ __all__ = [
     "ConsultingWork",
     "Education",
     "Profile",
-    "Project", 
+    "Project",
     "WorkExperience",
     "ConsultingWorkRead",
     "EducationRead",
@@ -32,3 +32,10 @@ __all__ = [
     "ProjectRead",
     "WorkExperienceRead",
 ]
+
+# Rebuild models to resolve forward references
+ProfileRead.model_rebuild()
+ProjectRead.model_rebuild()
+WorkExperienceRead.model_rebuild()
+ConsultingWorkRead.model_rebuild()
+EducationRead.model_rebuild()
