@@ -158,5 +158,6 @@ resource "azurerm_linux_web_app" "main" {
     "DATABASE_URL"                          = "mysql+pymysql://${mysql_user.prod.user}:${mysql_user.prod.plaintext_password}@${data.azurerm_mysql_flexible_server.existing.fqdn}:3306/${azurerm_mysql_flexible_database.main.name}?charset=${azurerm_mysql_flexible_database.main.charset}&ssl_disabled=false&ssl_verify_cert=false&ssl_verify_identity=false"
     "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.main.connection_string
     "SCM_DO_BUILD_DURING_DEPLOYMENT"        = "false"
+    "WEBSITES_PYTHON_VENV_NAME"             = ".venv"
   }
 }
