@@ -20,7 +20,7 @@ Thumbs.db
 
 # Environment variables
 .env
-.env.*
+
 
 # Database files (if using SQLite)
 *.sqlite3
