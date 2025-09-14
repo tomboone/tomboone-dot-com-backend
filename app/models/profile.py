@@ -32,21 +32,6 @@ class Profile(ProfileBase, table=True):
     education: List["Education"] = Relationship(back_populates="profile", cascade_delete=True)
 
 
-class ProfileCreate(ProfileBase):
-    """Schema for creating profiles"""
-    pass
-
-
-class ProfileUpdate(SQLModel):
-    """Schema for updating profiles"""
-    name: Optional[str] = Field(default=None, max_length=100)
-    profession: Optional[str] = Field(default=None, max_length=150)
-    email: Optional[str] = Field(default=None, max_length=255)
-    github_link: Optional[str] = Field(default=None, max_length=255)
-    linkedin_link: Optional[str] = Field(default=None, max_length=255)
-    summary_text: Optional[str] = None
-
-
 class ProfileRead(ProfileBase):
     """Schema for reading profiles"""
     id: int
