@@ -26,20 +26,6 @@ class WorkExperience(WorkExperienceBase, table=True):
     profile: Optional["Profile"] = Relationship(back_populates="work_experiences")
 
 
-class WorkExperienceCreate(WorkExperienceBase):
-    """Schema for creating work experiences"""
-    pass
-
-
-class WorkExperienceUpdate(SQLModel):
-    """Schema for updating work experiences"""
-    employer_name: Optional[str] = Field(default=None, max_length=200)
-    position: Optional[str] = Field(default=None, max_length=200)
-    start_date: Optional[str] = Field(default=None, max_length=50)
-    end_date: Optional[str] = Field(default=None, max_length=50)
-    order_index: Optional[int] = None
-
-
 class WorkExperienceRead(WorkExperienceBase):
     """Schema for reading work experiences"""
     id: int

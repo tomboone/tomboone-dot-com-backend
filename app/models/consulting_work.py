@@ -26,20 +26,6 @@ class ConsultingWork(ConsultingWorkBase, table=True):
     profile: Optional["Profile"] = Relationship(back_populates="consulting_work")
 
 
-class ConsultingWorkCreate(ConsultingWorkBase):
-    """Schema for creating consulting work records"""
-    pass
-
-
-class ConsultingWorkUpdate(SQLModel):
-    """Schema for updating consulting work records"""
-    employer_name: Optional[str] = Field(default=None, max_length=200)
-    position: Optional[str] = Field(default=None, max_length=200)
-    start_date: Optional[str] = Field(default=None, max_length=50)
-    end_date: Optional[str] = Field(default=None, max_length=50)
-    order_index: Optional[int] = None
-
-
 class ConsultingWorkRead(ConsultingWorkBase):
     """Schema for reading consulting work records"""
     id: int

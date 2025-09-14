@@ -18,13 +18,3 @@ class WorkExperienceRepository(BaseRepository[WorkExperience]):
             .order_by(self.model.order_index)  # type: ignore[arg-type]
         )
         return list(self.db.exec(statement).all())
-
-    def delete_by_profile_id(self, profile_id: int) -> int:
-        """Delete all work experiences for a profile and return count"""
-        statement = select(self.model).where(self.model.profile_id == profile_id)
-        items = self.db.exec(statement).all()
-        count = len(items)
-        for item in items:
-            self.db.delete(item)
-        self.db.commit()
-        return count
