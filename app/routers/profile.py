@@ -1,8 +1,7 @@
 """Profile routers"""
 from typing import Dict, Any
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status
 from app.dependencies import ProfileServiceDep
-from app.auth.dependencies import verify_admin_token
 from app.models import (
     ProfileCreate,
     ProfileUpdate,
@@ -42,8 +41,7 @@ def get_profile_by_id(profile_id: int, service: ProfileServiceDep):
 @router.post("/", response_model=ProfileRead, status_code=status.HTTP_201_CREATED)
 def create_profile(
     profile_data: ProfileCreate, 
-    service: ProfileServiceDep,
-    current_user = Depends(verify_admin_token)
+    service: ProfileServiceDep
 ):
     """Create a new profile"""
     try:
@@ -61,8 +59,7 @@ def create_profile(
 def update_profile(
     profile_id: int, 
     profile_data: ProfileUpdate, 
-    service: ProfileServiceDep,
-    current_user = Depends(verify_admin_token)
+    service: ProfileServiceDep
 ):
     """Update an existing profile"""
     profile = service.update_profile(profile_id, profile_data)
@@ -78,8 +75,7 @@ def update_profile(
 @router.delete("/{profile_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_profile(
     profile_id: int, 
-    service: ProfileServiceDep,
-    current_user = Depends(verify_admin_token)
+    service: ProfileServiceDep
 ):
     """Delete a profile"""
     success = service.delete_profile(profile_id)
@@ -94,8 +90,7 @@ def delete_profile(
 @router.post("/full", response_model=ProfileRead, status_code=status.HTTP_201_CREATED)
 def create_full_profile(
     profile_data: Dict[str, Any], 
-    service: ProfileServiceDep,
-    current_user = Depends(verify_admin_token)
+    service: ProfileServiceDep
 ):
     """Create a complete profile with all related data (work experience, education, projects, consulting work)"""
     try:
@@ -113,8 +108,7 @@ def create_full_profile(
 def update_full_profile(
     profile_id: int, 
     profile_data: Dict[str, Any], 
-    service: ProfileServiceDep,
-    current_user = Depends(verify_admin_token)
+    service: ProfileServiceDep
 ):
     """Update a complete profile with all related data"""
     try:

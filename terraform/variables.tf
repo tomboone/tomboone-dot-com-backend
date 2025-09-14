@@ -51,12 +51,17 @@ variable "mysql_admin_password" {
 
 variable "api_app_tenant_id" {
   type = string
-  description = "Tenant ID for the system assigned managed identity of the app service"
+  description = "Tenant ID for Entra ID API app registration"
 }
 
 variable "api_app_client_id" {
   type = string
-  description = "Client ID for the system assigned managed identity of the app service"
+  description = "Client ID for the Entra ID API app registration"
+}
+
+variable "openapi_client_id" {
+  type = string
+  description = "Client ID for the Open API app registration"
 }
 
 variable "front_end_url" {
