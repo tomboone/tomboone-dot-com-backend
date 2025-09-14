@@ -107,33 +107,29 @@ jobs:
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
-
-      - name: Configure Poetry to build locally
-        run: poetry config virtualenvs.in-project true
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          virtualenvs-path: antenv
 
       - name: Build with Poetry
-        run: |
-          # Install dependencies
-          poetry install --without dev
-
-      - name: Construct deployment artifact
-        run: |
-          VENV_PATH=$(poetry env info --path)
-          mkdir -p deployment_package/.python_packages/lib/site-packages
-          cp -r $VENV_PATH/lib/python*/site-packages/* deployment_package/.python_packages/lib/site-packages/
-          cp alembic.ini deployment_package/
-          cp -r alembic app deployment_package/
-
-      - name: Zip artifact for deployment
-        run: |
-          cd deployment_package
-          zip -r ../python-app.zip .
+        run: poetry install --without dev
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: python-app.zip
+          path: |
+            .
+            !.github
+            !scripts
+            !terraform
+            !.gitignore
+            !LICENSE
+            !poetry.lock
+            !poetry.toml
+            !pyproject.toml
+            !README.md
 
   deploy:
     name: Deploy
@@ -149,9 +145,7 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: python-app
-
-      - name: Unzip deployment artifact
-        run: unzip python-app.zip -d app
+          path: .
 
       - name: Azure Login
         uses: azure/login@v2
@@ -161,8 +155,6 @@ jobs:
           subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.APP_SERVICE_NAME }}
-          package: 'app'
