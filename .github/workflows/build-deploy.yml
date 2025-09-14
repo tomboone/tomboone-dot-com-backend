@@ -138,6 +138,7 @@ jobs:
             alembic/
             alembic.ini
             .venv/
+            .deployment
 
   deploy:
     name: Deploy
