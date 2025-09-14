@@ -10,8 +10,6 @@ class WorkExperienceBase(SQLModel):
     """Base work experience fields"""
     employer_name: str = Field(max_length=200)
     position: str = Field(max_length=200)
-    start_date: Optional[str] = Field(default=None, max_length=50)
-    end_date: Optional[str] = Field(default=None, max_length=50)
     order_index: int = Field(default=0)
 
 
