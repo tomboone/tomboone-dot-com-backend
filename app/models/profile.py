@@ -4,7 +4,16 @@ from typing import TYPE_CHECKING, Optional, List
 from sqlmodel import SQLModel, Field, Relationship
 
 if TYPE_CHECKING:
-    from app.models import Project, WorkExperience, ConsultingWork, Education
+    from app.models import (
+        Project,
+        WorkExperience,
+        ConsultingWork,
+        Education,
+        ProjectRead,
+        WorkExperienceRead,
+        ConsultingWorkRead,
+        EducationRead
+    )
 
 
 class ProfileBase(SQLModel):
@@ -37,3 +46,9 @@ class ProfileRead(ProfileBase):
     id: int
     created_at: datetime.datetime
     updated_at: datetime.datetime
+
+    # Include relationships
+    projects: List["ProjectRead"] = []
+    work_experiences: List["WorkExperienceRead"] = []
+    consulting_work: List["ConsultingWorkRead"] = []
+    education: List["EducationRead"] = []
