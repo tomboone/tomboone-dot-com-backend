@@ -39,8 +39,7 @@ env:
   TF_VAR_mysql_admin_password: ${{ secrets.MYSQL_ADMIN_PASSWORD }}
   TF_VAR_api_app_tenant_id: ${{ secrets.API_APP_TENANT_ID }}
   TF_VAR_api_app_client_id: ${{ secrets.API_APP_CLIENT_ID }}
-  TF_VAR_front_end_url: ${{ secrets.FRONT_END_URL }}
-  TF_VAR_azure_front_end_url: ${{ secrets.AZURE_FRONT_END_URL }}
+  TF_VAR_frontend_urls: ${{ secrets.FRONTEND_URLS }}
   TF_WORKING_DIR: ./terraform
 
 jobs:

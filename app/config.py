@@ -24,9 +24,7 @@ class Settings:
     ALLOWED_ORIGINS: List[str] = [
         "http://localhost:3000",  # Local development
         "http://localhost:5173",  # Vite dev server
-        # Add your production frontend URL here
-        # "https://your-frontend-domain.com"
-    ]
+    ] + (os.getenv("FRONTEND_URLS", "").split(",") if os.getenv("FRONTEND_URLS") else [])
     
     # Database
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./portfolio.db")
