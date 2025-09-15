@@ -17,9 +17,10 @@ async def lifespan(app_instance: FastAPI):
 
 
 app = FastAPI(
-    title="Tom Boone Portfolio Backend", 
+    title="Tom Boone Portfolio Backend",
     description="Backend API for Tom Boone's portfolio website",
-    lifespan=lifespan
+    lifespan=lifespan,
+    redirect_slashes=False
 )
 
 # Add CORS middleware

@@ -8,6 +8,7 @@ router = APIRouter(prefix="/profile", tags=["profile"])
 
 # noinspection PyTypeHints
 @router.get("/", response_model=ProfileRead)
+@router.get("", response_model=ProfileRead)
 def get_profile(service: ProfileServiceDep):
     """Get the site's profile (first profile in database)"""
     profile = service.get_first_profile()
