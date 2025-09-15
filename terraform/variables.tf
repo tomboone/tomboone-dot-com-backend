@@ -59,12 +59,7 @@ variable "api_app_client_id" {
   description = "Client ID for the Entra ID API app registration"
 }
 
-variable "front_end_url" {
+variable "frontend_urls" {
   type = string
-  description = "The custom domain production URL of the front end"
-}
-
-variable "azure_front_end_url" {
-  type = string
-  description = "The Azure-assigned production URL of the front end"
+  description = "Comma-separated list of frontend URLs for CORS"
 }

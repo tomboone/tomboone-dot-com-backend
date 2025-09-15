@@ -99,6 +99,7 @@ resource "azurerm_linux_web_app" "main" {
 
   app_settings = {
     "SCM_DO_BUILD_DURING_DEPLOYMENT"        = "false"
+    "FRONTEND_URLS"                         = var.frontend_urls
     "MYSQL_SSL_CA_CONTENT"                  = local.mysql_ca_cert_content
     "DATABASE_URL"                          = "mysql+pymysql://${mysql_user.prod.user}:${random_password.mysql.result}@${data.azurerm_mysql_flexible_server.existing.fqdn}:3306/${azurerm_mysql_flexible_database.main.name}?charset=${azurerm_mysql_flexible_database.main.charset}&ssl_disabled=false&ssl_verify_cert=false&ssl_verify_identity=false"
     "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.main.connection_string
