@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "4.32.0"
+      version = "4.45.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -10,7 +10,7 @@ terraform {
     }
     mysql = {
       source  = "petoju/mysql"
-      version = "3.0.75"
+      version = "3.0.84"
     }
   }
 }
