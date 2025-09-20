@@ -1,4 +1,5 @@
 """Database configuration"""
+from typing import Dict, Any
 from sqlmodel import create_engine, Session
 from app.config import settings
 
@@ -6,13 +7,12 @@ from app.config import settings
 SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL
 
 # Database engine
-connect_args = {}
+connect_args: Dict[str, Any] = {}
 if "sqlite" in settings.DATABASE_URL:
     connect_args = {"check_same_thread": False}
 elif "mysql" in settings.DATABASE_URL:
     connect_args = {
         "charset": "utf8mb4",
-        "use_unicode": True,
     }
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args=connect_args)

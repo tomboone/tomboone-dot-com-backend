@@ -51,20 +51,15 @@ variable "mysql_admin_password" {
 
 variable "api_app_tenant_id" {
   type = string
-  description = "Tenant ID for the system assigned managed identity of the app service"
+  description = "Tenant ID for Entra ID API app registration"
 }
 
 variable "api_app_client_id" {
   type = string
-  description = "Client ID for the system assigned managed identity of the app service"
+  description = "Client ID for the Entra ID API app registration"
 }
 
-variable "front_end_url" {
+variable "frontend_urls" {
   type = string
-  description = "The custom domain production URL of the front end"
-}
-
-variable "azure_front_end_url" {
-  type = string
-  description = "The Azure-assigned production URL of the front end"
+  description = "Comma-separated list of frontend URLs for CORS"
 }

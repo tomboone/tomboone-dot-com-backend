@@ -33,12 +33,13 @@ env:
   TF_VAR_mysql_flexible_server_rg_name: ${{ secrets.MYSQL_FLEXIBLE_SERVER_RG_NAME }}
   TF_VAR_log_analytics_workspace_name: ${{ secrets.LOG_ANALYTICS_WORKSPACE_NAME }}
   TF_VAR_log_analytics_workspace_rg_name: ${{ secrets.LOG_ANALYTICS_WORKSPACE_RG_NAME }}
+  TF_VAR_vnet_name: ${{ secrets.VNET_NAME }}
+  TF_VAR_vnet_rg_name: ${{ secrets.VNET_RG_NAME }}
   TF_VAR_mysql_admin_username: ${{ secrets.MYSQL_ADMIN_USERNAME }}
   TF_VAR_mysql_admin_password: ${{ secrets.MYSQL_ADMIN_PASSWORD }}
   TF_VAR_api_app_tenant_id: ${{ secrets.API_APP_TENANT_ID }}
   TF_VAR_api_app_client_id: ${{ secrets.API_APP_CLIENT_ID }}
-  TF_VAR_front_end_url: ${{ secrets.FRONT_END_URL }}
-  TF_VAR_azure_front_end_url: ${{ secrets.AZURE_FRONT_END_URL }}
+  TF_VAR_frontend_urls: ${{ secrets.FRONTEND_URLS }}
   TF_WORKING_DIR: ./terraform
 
 jobs:
@@ -105,30 +106,23 @@ jobs:
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
-
-      - name: Configure Poetry to build locally
-        run: poetry config virtualenvs.in-project true
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
 
       - name: Build with Poetry
-        run: |
-          # Install dependencies
-          poetry install --without dev
-
-      - name: Construct deployment artifact
-        run: |
-          mkdir -p deploy
-          cp -r $(poetry env info --path)/lib/python${{ env.PYTHON_VERSION }}/site-packages/* deploy/
-          find . -maxdepth 1 -type f -name "*.py" -exec cp {} deploy/ \;
-          cp -r app deploy/
-          cp -r alembic deploy/
-          cp alembic.ini deploy/ 2>/dev/null || true
-          mkdir -p deploy/instance
+        run: poetry install --without dev
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: deploy/
+          include-hidden-files: true
+          path: |
+            app/
+            alembic/
+            alembic.ini
+            .venv/
 
   deploy:
     name: Deploy
@@ -140,7 +134,7 @@ jobs:
       APP_SERVICE_NAME: ${{ needs.terraform.outputs.app_service_name }}
 
     steps:
-      - name: Download build artifact
+      - name: Download artifact
         uses: actions/download-artifact@v5
         with:
           name: python-app
@@ -154,7 +148,6 @@ jobs:
           subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.APP_SERVICE_NAME }}

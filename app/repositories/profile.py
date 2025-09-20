@@ -17,10 +17,10 @@ class ProfileRepository(BaseRepository[Profile]):
         statement = (
             select(self.model)
             .options(
-                joinedload(Profile.work_experiences),
-                joinedload(Profile.education),
-                joinedload(Profile.projects),
-                joinedload(Profile.consulting_work)
+                joinedload(self.model.work_experiences),  # type: ignore[arg-type]
+                joinedload(self.model.education),  # type: ignore[arg-type]
+                joinedload(self.model.projects),  # type: ignore[arg-type]
+                joinedload(self.model.consulting_work)  # type: ignore[arg-type]
             )
             .where(self.model.id == profile_id)
         )
@@ -31,10 +31,10 @@ class ProfileRepository(BaseRepository[Profile]):
         statement = (
             select(self.model)
             .options(
-                joinedload(Profile.work_experiences),
-                joinedload(Profile.education),
-                joinedload(Profile.projects),
-                joinedload(Profile.consulting_work)
+                joinedload(self.model.work_experiences),  # type: ignore[arg-type]
+                joinedload(self.model.education),  # type: ignore[arg-type]
+                joinedload(self.model.projects),  # type: ignore[arg-type]
+                joinedload(self.model.consulting_work)  # type: ignore[arg-type]
             )
         )
         return list(self.db.exec(statement).all())
@@ -49,10 +49,10 @@ class ProfileRepository(BaseRepository[Profile]):
         statement = (
             select(self.model)
             .options(
-                joinedload(Profile.work_experiences),
-                joinedload(Profile.education),
-                joinedload(Profile.projects),
-                joinedload(Profile.consulting_work)
+                joinedload(self.model.work_experiences),  # type: ignore[arg-type]
+                joinedload(self.model.education),  # type: ignore[arg-type]
+                joinedload(self.model.projects),  # type: ignore[arg-type]
+                joinedload(self.model.consulting_work)  # type: ignore[arg-type]
             )
         )
         return self.db.exec(statement).first()

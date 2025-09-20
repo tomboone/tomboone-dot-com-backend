@@ -5,7 +5,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel
 from app.db.database import engine
 from app.routers import profile_router
-from app.auth.azure_ad import azure_scheme
 from app.config import settings
 
 
@@ -18,9 +17,10 @@ async def lifespan(app_instance: FastAPI):
 
 
 app = FastAPI(
-    title="Tom Boone Portfolio Backend", 
+    title="Tom Boone Portfolio Backend",
     description="Backend API for Tom Boone's portfolio website",
-    lifespan=lifespan
+    lifespan=lifespan,
+    redirect_slashes=False
 )
 
 # Add CORS middleware
@@ -31,10 +31,6 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
-
-# Configure Azure AD integration if available
-if azure_scheme:
-    app.include_router(azure_scheme.router, prefix="/auth", tags=["auth"])
 
 # Include routers
 app.include_router(profile_router, prefix="/api/v1")

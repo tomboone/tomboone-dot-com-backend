@@ -4,7 +4,16 @@ from typing import TYPE_CHECKING, Optional, List
 from sqlmodel import SQLModel, Field, Relationship
 
 if TYPE_CHECKING:
-    from app.models import Project, WorkExperience, ConsultingWork, Education
+    from app.models import (
+        Project,
+        WorkExperience,
+        ConsultingWork,
+        Education,
+        ProjectRead,
+        WorkExperienceRead,
+        ConsultingWorkRead,
+        EducationRead
+    )
 
 
 class ProfileBase(SQLModel):
@@ -32,23 +41,14 @@ class Profile(ProfileBase, table=True):
     education: List["Education"] = Relationship(back_populates="profile", cascade_delete=True)
 
 
-class ProfileCreate(ProfileBase):
-    """Schema for creating profiles"""
-    pass
-
-
-class ProfileUpdate(SQLModel):
-    """Schema for updating profiles"""
-    name: Optional[str] = Field(default=None, max_length=100)
-    profession: Optional[str] = Field(default=None, max_length=150)
-    email: Optional[str] = Field(default=None, max_length=255)
-    github_link: Optional[str] = Field(default=None, max_length=255)
-    linkedin_link: Optional[str] = Field(default=None, max_length=255)
-    summary_text: Optional[str] = None
-
-
 class ProfileRead(ProfileBase):
     """Schema for reading profiles"""
     id: int
     created_at: datetime.datetime
     updated_at: datetime.datetime
+
+    # Include relationships
+    projects: List["ProjectRead"] = []
+    work_experiences: List["WorkExperienceRead"] = []
+    consulting_work: List["ConsultingWorkRead"] = []
+    education: List["EducationRead"] = []

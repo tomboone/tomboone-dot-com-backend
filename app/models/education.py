@@ -24,18 +24,6 @@ class Education(EducationBase, table=True):
     profile: Optional["Profile"] = Relationship(back_populates="education")
 
 
-class EducationCreate(EducationBase):
-    """Schema for creating education records"""
-    pass
-
-
-class EducationUpdate(SQLModel):
-    """Schema for updating education records"""
-    degree_type: Optional[str] = Field(default=None, max_length=100)
-    university_name: Optional[str] = Field(default=None, max_length=200)
-    order_index: Optional[int] = None
-
-
 class EducationRead(EducationBase):
     """Schema for reading education records"""
     id: int
