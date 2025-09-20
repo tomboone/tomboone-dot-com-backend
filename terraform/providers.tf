@@ -2,15 +2,15 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "4.45.0"
+      version = ">=4.0"
     }
     random = {
       source  = "hashicorp/random"
-      version = "3.7.2"
+      version = ">=3.0"
     }
     mysql = {
       source  = "petoju/mysql"
-      version = "3.0.84"
+      version = ">=3.0"
     }
   }
 }
