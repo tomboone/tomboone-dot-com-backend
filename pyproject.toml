@@ -22,8 +22,8 @@ packages = [{include = "app"}]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
-mypy = "^1.17.1"
-ruff = "^0.12.10"
+mypy = "^1.18.2"
+ruff = "^0.13.1"
 bandit = "^1.8.6"
 pre-commit = "^4.3.0"
 pytest-cov = "^6.2.1"
